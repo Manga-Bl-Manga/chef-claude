@@ -1,0 +1,26 @@
+body {
+    background-color: #FAFAF8;
+    margin: 0;
+}
+
+.header {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    height: 111px;
+    background-color: white;
+    box-shadow: 0 3px 1px rgba(0, 0, 0, 0.1);   ;
+    margin-bottom: 70px;
+}
+
+.header > img {
+    width: 43px;
+    object-fit: contain;
+    margin-right: 11px;
+}
+
+.header > p {
+    font-size: 32px;
+    font-family: Inter;
+    font-weight: 400;
+}
