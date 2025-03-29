@@ -1,4 +1,11 @@
 export default function Ingredients(props) {
+
+    const ingredientsMap = props.ingredients.map(ingrediant => {
+        return (
+            <li>{ingrediant}</li>
+        )
+    })
+
     return (
         // I need to grap 3 things from main through props
         // 1) ingredientsMap 2)ingredients 3)onGetRecipe
@@ -7,7 +14,7 @@ export default function Ingredients(props) {
             <h2>Ingredients on hand:</h2>
 
             <ul>
-                {props.ingredientsMap}
+                {ingredientsMap}
             </ul>
             {props.ingredients.length > 3 &&
                 <div className="get-recipe-container">
