@@ -2,9 +2,13 @@ import "./style/mainBody.css"
 import { useState } from "react"
 import Dummy from "./dummy"
 import Ingredients from "./ingredients"
+import { getRecipeFromMistral } from "./ai"
+
+// 
 export default function MainBody() {
     const [ingredients, setIngredients] = useState([])
     const [recipeShown, setRecipeShown] = useState(false)
+    const [aiResponse, setAiResponse] = useState("")
 
     function onClick(formData) {
         const newIngrediant = formData.get("ingrediant")
@@ -14,6 +18,8 @@ export default function MainBody() {
 
     function onGetRecipe() {
         setRecipeShown(true)
+
+        setAiResponse(getRecipeFromMistral(ingredients))
     }
     return (
         <main>
@@ -25,7 +31,7 @@ export default function MainBody() {
             ingredients = {ingredients}
             onGetRecipe = {onGetRecipe}
             />}
-            {recipeShown && <Dummy />}
+            {recipeShown && <Dummy response = {aiResponse}/>}
         </main>
     )
 }

@@ -1,8 +1,8 @@
 export default function Ingredients(props) {
 
-    const ingredientsMap = props.ingredients.map(ingrediant => {
+    const ingredientsMap = props.ingredients.map((ingrediant,index) => {
         return (
-            <li>{ingrediant}</li>
+            <li key={index}>{ingrediant}</li>
         )
     })
 
