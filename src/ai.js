@@ -1,30 +1,30 @@
-import { HfInference } from '@huggingface/inference'
+import { HfInference } from '@huggingface/inference';
 
-const SYSTEM_PROMPT = `
-You are an assistant that receives a list of ingredients that a user 
-has and suggests a recipe they could make with some or all of those 
-ingredients. You don't need to use every ingredient they mention in your recipe. 
-The recipe can include additional ingredients they didn't mention, but try not to 
-include too many extra ingredients. Format your response in markdown to make it 
-easier to render to a web page
-`
+const hf = new HfInference(import.meta.env.VITE_API_KEY);
 
-// Correctly access the API key from environment variables
-const hf = new HfInference(import.meta.env.VITE_API_KEY)
-
-export async function getRecipeFromMistral(ingredientsArr) {
-    const ingredientsString = ingredientsArr.join(", ")
+export async function getRecipeFromZephyr(ingredientsArr) {
+    const ingredientsString = ingredientsArr.join(", ");
+    
     try {
-        const response = await hf.chatCompletion({
-            model: "mistralai/Mixtral-8x7B-Instruct-v0.1",
-            messages: [
-                { role: "system", content: SYSTEM_PROMPT },
-                { role: "user", content: `I have ${ingredientsString}. Please give me a recipe you'd recommend I make!` },
-            ],
-            max_tokens: 1024,
-        })
-        return response.choices[0].message.content
+      const response = await hf.textGeneration({
+        model: "HuggingFaceH4/zephyr-7b-beta",
+        inputs: `[INST] <<SYS>>
+        You are a chef assistant. Create a detailed recipe using some of these ingredients: ${ingredientsString}.
+        Return ONLY the recipe in markdown format with # Title, ## Ingredients and ## Instructions sections.
+        Do not include the instruction or any conversational text.
+        <</SYS>>[/INST]`,
+        parameters: {
+          max_new_tokens: 1024,
+          temperature: 0.7,
+          do_sample: false // Makes output more deterministic
+        }
+      });
+  
+      // Extract just the recipe part (after [/INST])
+      const cleanOutput = response.generated_text.split('[/INST]').pop().trim();
+      return cleanOutput || "Could not generate recipe";
+  
     } catch (err) {
-        console.error(err.message)
+      return `## Error\n${err.message || "API request failed"}`;
     }
-}
+  }
