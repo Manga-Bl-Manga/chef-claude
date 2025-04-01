@@ -1,7 +1,11 @@
+import Markdown from "react-markdown"
+import remarkGfm from 'remark-gfm'
+
 export default function Dummy(props){
+    console.log('Response type:', typeof props.response, 'Value:', props.response)
     return (
         <>
-            <h1>{props.response}</h1>
+            <Markdown children={props.response} remarkPlugins={[remarkGfm]}/>
         </>
     )
 }
