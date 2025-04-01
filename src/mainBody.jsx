@@ -2,7 +2,7 @@ import "./style/mainBody.css"
 import { useState } from "react"
 import Dummy from "./dummy"
 import Ingredients from "./ingredients"
-import { getRecipeFromMistral } from "./ai"
+import { getRecipeFromZephyr } from "./ai"
 
 // 
 export default function MainBody() {
@@ -16,11 +16,11 @@ export default function MainBody() {
 
     }
 
-    function onGetRecipe() {
-        setRecipeShown(true)
-
-        setAiResponse(getRecipeFromMistral(ingredients))
-    }
+    async function onGetRecipe() {
+        setRecipeShown(true);
+        const recipe = await getRecipeFromZephyr(ingredients);
+        setAiResponse(recipe); // Will receive either recipe or error markdown
+      }
     return (
         <main>
             <form action={onClick}>
